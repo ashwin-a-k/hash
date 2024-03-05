@@ -18,7 +18,7 @@ class Hash
 {
 private:
 	int numSlots;
-	T* arr_ptr;
+	List<T>* arr_ptr;
 public:
 			Hash		( void );
 			Hash		( int table_size );
