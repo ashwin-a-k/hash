@@ -8,7 +8,9 @@
 
 #include "Board.h"
 #include <cstring>
-#include <random>
+#include <string>
+#include <cmath>
+#include <unordered_map>
 using namespace std;
 
 //============================================================================
@@ -133,12 +135,30 @@ istream &  operator>> ( istream &is, Board &b )
 #ifdef HASHFUNCTION1
 int      Board::getHashValue    ( int numHashSlots ) const
 {
-   int val = 0;
-	for (int i=0; i < BOARD_SIZE; i++) {
-      for (int j=0; j < BOARD_SIZE; j++)
-         val += (i << 1) * (int)board[i][j] + (j << 1);
+   unordered_map<char, int> charToPrime = {
+        {'A', 786433}, {'B', 12289}, {'C', 389}, {'D', 769},
+        {'E', 1543}, {'F', 3079}, {'G', 97}, {'H', 193},
+        {'I', 23}, {'J', 29}, {'K', 31}, {'L', 37},
+        {'M', 6151}, {'N', 41}, {'O', 47}, {'P', 53}
+   };
+   unsigned long long hashValue = 0;
+   unsigned long long mod = 1e9 + 9;
+
+   for (int i = 0; i < BOARD_SIZE; ++i) {
+      for (int j = 0; j < BOARD_SIZE; ++j) {
+         char ch = board[i][j];
+         if (charToPrime.find(ch) != charToPrime.end()) {
+            int multiplier = charToPrime[ch];
+            if (ch >= 'A' && ch <= 'L') {
+               multiplier *= (i + 2) * (j + 2);
+            } else if (ch >= 'M' && ch <= 'P')
+               multiplier *= (i + j + 7);
+            hashValue = (hashValue * 257 + multiplier) % mod;
+         }
+      }
    }
-	return val % numHashSlots;
+   return hashValue % numHashSlots;
+
 }
 #endif
 //============================================================================
@@ -152,10 +172,12 @@ int      Board::getHashValue    ( int numHashSlots ) const
 {
 	unsigned long val = 5381;
    for (int i=0; i < BOARD_SIZE; i++) {
-      for (int j=0; j < BOARD_SIZE; j++) 
-         val = ((val << 5) + val) ^ (int)board[i][j];
+      for (int j=0; j < BOARD_SIZE; j++) {
+         val = ((val << 5) + val) ^ ((int)board[i][j]);
+      }
    }
-	return val % numHashSlots;
+   val >>= sizeof(unsigned long);
+	return val  % numHashSlots;
 }
 #endif
 //============================================================================
@@ -167,19 +189,20 @@ int      Board::getHashValue    ( int numHashSlots ) const
 #ifdef HASHFUNCTION3
 int      Board::getHashValue    ( int numHashSlots ) const
 {
-    unsigned long hashVal = 5381;
-    const int prime = 33; // A prime number for hashing
-    for (int i = 0; i < BOARD_SIZE; i++) {
-        for (int j = 0; j < BOARD_SIZE; j++) {
-            char vehicle = board[i][j];
-            if (vehicle != ' ') { // Assuming ' ' represents an empty space
-                int orientation = (i > 0 && board[i-1][j] == vehicle) || (i < BOARD_SIZE-1 && board[i+1][j] == vehicle) ? 1 : 0;
-                unsigned long partialHash = (vehicle - 'A' + 1) * prime + (i * BOARD_SIZE + j) * orientation;
-                hashVal = (hashVal << 5) ^ partialHash;
-            }
-        }
-    }
-    return hashVal % numHashSlots;
+   unsigned long long hash = 0;
+   unsigned long long mod = 1e9 + 9;
+   const unsigned int base = 257;
+
+   for (int i = 0; i < BOARD_SIZE; ++i) {
+      unsigned long long rowHash = 0;
+      for (int j = 0; j < BOARD_SIZE; ++j) {
+         unsigned long long mix = (((board[i][j] + 1)*(i + 2)*(j + 2)) ^ (base * (i + j + 2))) % mod;
+         rowHash = (rowHash * base + mix) % mod;
+      }
+      hash += (rowHash * (i + 1)) % mod;
+   }
+   hash >>= 11;
+   return hash % numHashSlots;
 }
 #endif
 //============================================================================

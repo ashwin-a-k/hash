@@ -37,7 +37,6 @@ int	main( int argc, char *argv[] )
          max = table.getSlotCount(i);
       if (table.getSlotCount(i) < min)
          min = table.getSlotCount(i);
-      cout << table.getSlotCount(i) << " ";
    }
 
    float avg = ((float)total / (float)table.getNumSlots());

@@ -47,8 +47,6 @@ public:
 
 private:
    unsigned char board[BOARD_SIZE][BOARD_SIZE];
-   // feel free to add any private methods you think may be helpful
-   // for your hash functions.
 };
 
 #endif
