@@ -7,8 +7,8 @@
 //============================================================================
 
 #include "Board.h"
-#include <iostream>
 #include <cstring>
+#include <random>
 using namespace std;
 
 //============================================================================
@@ -133,8 +133,12 @@ istream &  operator>> ( istream &is, Board &b )
 #ifdef HASHFUNCTION1
 int      Board::getHashValue    ( int numHashSlots ) const
 {
-	// write your first naive hash function here.
-	return 0;
+   int val = 0;
+	for (int i=0; i < BOARD_SIZE; i++) {
+      for (int j=0; j < BOARD_SIZE; j++)
+         val += (i << 1) * (int)board[i][j] + (j << 1);
+   }
+	return val % numHashSlots;
 }
 #endif
 //============================================================================
@@ -146,8 +150,12 @@ int      Board::getHashValue    ( int numHashSlots ) const
 #ifdef HASHFUNCTION2
 int      Board::getHashValue    ( int numHashSlots ) const
 {
-	// write your second (improved) hash function here.
-	return 0;
+	unsigned long val = 5381;
+   for (int i=0; i < BOARD_SIZE; i++) {
+      for (int j=0; j < BOARD_SIZE; j++) 
+         val = ((val << 5) + val) ^ (int)board[i][j];
+   }
+	return val % numHashSlots;
 }
 #endif
 //============================================================================
@@ -159,8 +167,19 @@ int      Board::getHashValue    ( int numHashSlots ) const
 #ifdef HASHFUNCTION3
 int      Board::getHashValue    ( int numHashSlots ) const
 {
-	// write your very best hash function here.
-	return 0;
+    unsigned long hashVal = 5381;
+    const int prime = 33; // A prime number for hashing
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        for (int j = 0; j < BOARD_SIZE; j++) {
+            char vehicle = board[i][j];
+            if (vehicle != ' ') { // Assuming ' ' represents an empty space
+                int orientation = (i > 0 && board[i-1][j] == vehicle) || (i < BOARD_SIZE-1 && board[i+1][j] == vehicle) ? 1 : 0;
+                unsigned long partialHash = (vehicle - 'A' + 1) * prime + (i * BOARD_SIZE + j) * orientation;
+                hashVal = (hashVal << 5) ^ partialHash;
+            }
+        }
+    }
+    return hashVal % numHashSlots;
 }
 #endif
 //============================================================================

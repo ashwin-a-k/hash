@@ -6,8 +6,9 @@
 // Table class
 //=====================================================
 
+#include<stdexcept>
 #include "Hash.h"
-#include "List.cpp"
+#include "List.h"
 
 //=====================================================
 // default constructor
@@ -15,8 +16,8 @@
 template <class T> 
 	Hash<T>::Hash( void )
 {
-	int numSlots = 10;
-	List<T>* arr_ptr = new List<T>[numSlots];
+	numSlots = 10;
+	arr_ptr = new List<T>[numSlots];
 }
 
 //=====================================================
@@ -25,8 +26,8 @@ template <class T>
 template <class T> 
 	Hash<T>::Hash( int table_size )
 {
-	int numSlots = table_size;
-	List<T>* arr_ptr = new List<T>[numSlots];
+	numSlots = table_size;
+	arr_ptr = new List<T>[numSlots];
 }
 
 //=====================================================
@@ -35,11 +36,10 @@ template <class T>
 template <class T>
 	Hash<T>::Hash( const Hash<T> &h )
 {
-	int numSlots = h.numSlots;
-	List<T>* arr_ptr = new List<T>[numSlots];
+	numSlots = h.numSlots;
+	arr_ptr = new List<T>[numSlots];
 	
-	for (int i = 0; i < numSlots; i++)
-	{
+	for (int i = 0; i < numSlots; i++) {
 		arr_ptr[i] = h.arr_ptr[i]; // might be broken
 	}
 }
@@ -47,6 +47,7 @@ template <class T>
 //=====================================================
 // Destructor
 //=====================================================
+template<class T>
 	Hash<T>::~Hash	( void )
 {
 	delete[] arr_ptr;
@@ -58,15 +59,13 @@ template <class T>
 template <class T>
 Hash<T> Hash<T>::operator= ( const Hash<T> &hash )
 {
-	if (this != hash)
-	{
-		delete arr_ptr[];
+	if (this != hash) {
+		delete[] arr_ptr;
 		
-		int numSlots = other.numSlots;
+		numSlots = hash.numSlots;
 		List<T>* arr_ptr = new List<T>[numSlots]; 
-		for (int i = 0; i < numSlots; i++)
-		{
-			arr_ptr[i] = h.arr_ptr[i]; // might be broken
+		for (int i = 0; i < numSlots; i++) {
+			arr_ptr[i] = hash.arr_ptr[i]; // might be broken
 		}	
 	}
 	return *this;
@@ -79,10 +78,8 @@ Hash<T> Hash<T>::operator= ( const Hash<T> &hash )
 template <class T>
 bool Hash<T>::query( const T &item )
 {
-	for (int i = 0; i < numSlots; i++)
-	{
-		List<T> l1 = arr_ptr[i];
-		if (l1.query(item) == true)
+	for (int i = 0; i < numSlots; i++) {
+		if (arr_ptr[i].query(item))
 			return true;
 	}
 	return false;
@@ -94,18 +91,25 @@ bool Hash<T>::query( const T &item )
 template <class T>
 void Hash<T>::remove (T &item)
 {
-	int hashValue = item.getHashValue(numSlots);
-	arr_ptr[hashValue].remove(item);
+	int index = -1;
+	for (int i = 0; i < numSlots; i++) {
+		if (arr_ptr[i].query(item)) {
+			index = i;
+			break;
+		}
+	}
+	if (index != -1)
+		arr_ptr[index].remove(item);
 }
 
 //=====================================================
-// insert operator
+// insert operator NEED REVISION
 //=====================================================
 template <class T>
 void Hash<T>::insert (T &item)
 {
-	int hashValue = item.getHashValue(numSlots);
-	arr_ptr[hashValue].insert(item);
+	int hashVal = item.getHashValue(numSlots);
+	arr_ptr[hashVal].prepend(item); //front
 }
 
 
@@ -113,7 +117,7 @@ void Hash<T>::insert (T &item)
 // clear all
 //=====================================================
 template <class T>
-void Hash<T>::clearAll (void );
+void Hash<T>::clearAll (void )
 {
 	for (int i = 0; i < numSlots; i++)
 	{
@@ -123,23 +127,19 @@ void Hash<T>::clearAll (void );
 
 
 //=====================================================
-// getSlotCounts
+// getSlotCount
 //=====================================================
 template <class T>
-int getSlotCounts (int slot)
+int Hash<T>::getSlotCount (int slot)
 {
-	List<T> l1 = arr_ptr[slot];
-	return l1.length();
+	return arr_ptr[slot].length();
 }
 
 //=====================================================
 // getNumSlots operator
 //=====================================================
 template <class T>
-int Hash<T>::getNumSlots ( int slot )
+int Hash<T>::getNumSlots ( void )
 {
 	return numSlots;
 }
-
-
-

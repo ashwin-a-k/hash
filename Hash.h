@@ -7,7 +7,6 @@
 //=====================================================
 #ifndef HASH_H
 #define HASH_H
-#include <iostream>
 #include "List.h"
 
 #define DEFAULT_HASH_SIZE 10
@@ -26,12 +25,12 @@ public:
 			~Hash		( void );
 	Hash<T>	operator=	( const Hash<T> &hash );
 	bool		query		( const T &item );
+	void 		remove		( T &item );
 	void		insert		( T &item );
 	void 		clearAll	( void );
-	int		getSlotCount	( int slot );
-	int 		getNumSlots	( int slot );
-	
-}
+	int			getSlotCount( int slot );
+	int 		getNumSlots	( void );
+};
 
 #include "Hash.cpp"
 
