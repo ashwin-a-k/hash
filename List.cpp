@@ -434,7 +434,7 @@ void List<T>::clear( void ){
 // RETURN: boolean true or false
 //==============================================
 template <class T> 
-bool List<T>query ( const T &item );
+bool List<T>::query ( const T &item )
 {
     // set defalut index to -1
     int index = -1;
