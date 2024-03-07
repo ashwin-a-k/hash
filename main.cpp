@@ -46,7 +46,19 @@ int	main( int argc, char *argv[] )
       sd += pow((float)table.getSlotCount(i) - avg, 2);
    sd = sqrt(sd / (float)table.getNumSlots());
 
-   cout << total << endl << avg << endl << sd << endl << min << endl << max << endl;
-
+   cout << total << endl << avg << endl << sd << endl << min << endl << max << endl << endl;
+   
+   // Best Hashing performance with 50 hash table slots
+   /*
+   int* slotCounts = new int[size];
+   for (int i = 0; i < size; ++i) 
+   {
+   	slotCounts[i] = table.getSlotCount(i);
+   }
+   for (int i = 0; i < size; ++i)
+   {
+   	cout << "Slot " << i << ": " << slotCounts[i] << " items" << endl;
+   }
+   */
    return 0;
 }
