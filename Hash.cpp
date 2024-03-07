@@ -11,7 +11,10 @@
 #include "List.h"
 
 //=====================================================
-// default constructor
+// Hash ( void )
+// Default Constructor for Hash class
+// Parameters: none
+// returns: none
 //=====================================================
 template <class T> 
 	Hash<T>::Hash( void )
@@ -21,7 +24,10 @@ template <class T>
 }
 
 //=====================================================
+// Hash( int table_size )
 // constructor with integer parameter
+// Parameters: int table_size
+// returns none
 //=====================================================
 template <class T> 
 	Hash<T>::Hash( int table_size )
@@ -31,7 +37,10 @@ template <class T>
 }
 
 //=====================================================
-// copy constructor
+// Hash (const Hash<T> &h )
+// Copy Constructor
+// Parameters: Hash<T> &h
+// Returns: none
 //=====================================================
 template <class T>
 	Hash<T>::Hash( const Hash<T> &h )
@@ -45,7 +54,10 @@ template <class T>
 }
 
 //=====================================================
-// Destructor
+// ~Hash(void)
+// Destructor, deletes the array pointer
+// No Parameters
+// Returns none
 //=====================================================
 template<class T>
 	Hash<T>::~Hash	( void )
@@ -54,7 +66,10 @@ template<class T>
 }
 
 //=====================================================
+// operator= ( const Hash<T> &hash )
 // assignment operator
+// Parameters: Hash<T> &hash
+// returns *this, a hash table
 //=====================================================
 template <class T>
 Hash<T> Hash<T>::operator= ( const Hash<T> &hash )
@@ -73,7 +88,11 @@ Hash<T> Hash<T>::operator= ( const Hash<T> &hash )
 }
 
 //=====================================================
-// query operator
+// query ( const T &item )
+// Returns true if an item is in the list and if 
+// it is not, it returns false
+// Parameters: const T &item
+// returns boolean true or false
 //=====================================================
 template <class T>
 bool Hash<T>::query( const T &item )
@@ -86,7 +105,11 @@ bool Hash<T>::query( const T &item )
 }
 
 //=====================================================
-// remove operator
+// remove (T &item)
+// remove operator, it removes something from the hash
+// table
+// Parameters: T &item
+// Returns nothing
 //=====================================================
 template <class T>
 void Hash<T>::remove (T &item)
@@ -103,7 +126,10 @@ void Hash<T>::remove (T &item)
 }
 
 //=====================================================
+// insert (T &item)
 // insert operator NEED REVISION
+// Parameters: T &item
+// Returns nothing
 //=====================================================
 template <class T>
 void Hash<T>::insert (T &item)
@@ -114,7 +140,10 @@ void Hash<T>::insert (T &item)
 
 
 //=====================================================
-// clear all
+// clearAll (void)
+// clears everything in the hash table
+// Parameters: none
+// Returns nothing
 //=====================================================
 template <class T>
 void Hash<T>::clearAll (void )
@@ -127,7 +156,11 @@ void Hash<T>::clearAll (void )
 
 
 //=====================================================
-// getSlotCount
+// getSlotCount(int slot)
+// Takes an integer parameter indicating a slot in the 
+// table and returns the number of items in the slot
+// Parameters: none
+// Returns arr_ptr[slot].length();
 //=====================================================
 template <class T>
 int Hash<T>::getSlotCount (int slot)
@@ -136,7 +169,10 @@ int Hash<T>::getSlotCount (int slot)
 }
 
 //=====================================================
-// getNumSlots operator
+// getNumSlots(void)
+// Finds the number of slots in the table and returns it
+// Parameters: none
+// returns numSlots
 //=====================================================
 template <class T>
 int Hash<T>::getNumSlots ( void )
