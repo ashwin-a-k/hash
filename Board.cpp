@@ -10,7 +10,6 @@
 #include <cstring>
 #include <string>
 #include <cmath>
-#include <unordered_map>
 using namespace std;
 
 //============================================================================
@@ -135,30 +134,14 @@ istream &  operator>> ( istream &is, Board &b )
 #ifdef HASHFUNCTION1
 int      Board::getHashValue    ( int numHashSlots ) const
 {
-   unordered_map<char, int> charToPrime = {
-        {'A', 786433}, {'B', 12289}, {'C', 389}, {'D', 769},
-        {'E', 1543}, {'F', 3079}, {'G', 97}, {'H', 193},
-        {'I', 23}, {'J', 29}, {'K', 31}, {'L', 37},
-        {'M', 6151}, {'N', 41}, {'O', 47}, {'P', 53}
-   };
-   unsigned long long hashValue = 0;
-   unsigned long long mod = 1e9 + 9;
-
-   for (int i = 0; i < BOARD_SIZE; ++i) {
-      for (int j = 0; j < BOARD_SIZE; ++j) {
-         char ch = board[i][j];
-         if (charToPrime.find(ch) != charToPrime.end()) {
-            int multiplier = charToPrime[ch];
-            if (ch >= 'A' && ch <= 'L') {
-               multiplier *= (i + 2) * (j + 2);
-            } else if (ch >= 'M' && ch <= 'P')
-               multiplier *= (i + j + 7);
-            hashValue = (hashValue * 257 + multiplier) % mod;
-         }
+   unsigned int hash = 97;
+   for (int i=0; i < BOARD_SIZE; i++) {
+      for (int j=0; j < BOARD_SIZE; j++) {
+         hash = hash * 137 + (int)board[i][j];
       }
    }
-   return hashValue % numHashSlots;
-
+   hash >>= 11;
+	return hash  % numHashSlots;
 }
 #endif
 //============================================================================
@@ -170,14 +153,14 @@ int      Board::getHashValue    ( int numHashSlots ) const
 #ifdef HASHFUNCTION2
 int      Board::getHashValue    ( int numHashSlots ) const
 {
-	unsigned long val = 5381;
+	unsigned long hash = 5381;
    for (int i=0; i < BOARD_SIZE; i++) {
       for (int j=0; j < BOARD_SIZE; j++) {
-         val = ((val << 5) + val) ^ ((int)board[i][j]);
+         hash = ((hash << 5) + hash) ^ ((int)board[i][j]);
       }
    }
-   val >>= sizeof(unsigned long);
-	return val  % numHashSlots;
+   hash >>= sizeof(unsigned long);
+	return hash  % numHashSlots;
 }
 #endif
 //============================================================================
@@ -191,7 +174,7 @@ int      Board::getHashValue    ( int numHashSlots ) const
 {
    unsigned long long hash = 0;
    unsigned long long mod = 1e9 + 9;
-   const unsigned int base = 257;
+   const unsigned int base = 8702;
 
    for (int i = 0; i < BOARD_SIZE; ++i) {
       unsigned long long rowHash = 0;

@@ -74,7 +74,7 @@ template<class T>
 template <class T>
 Hash<T> Hash<T>::operator= ( const Hash<T> &hash )
 {
-	if (this != hash) {
+	if (this != &hash) {
 		delete[] arr_ptr;
 		
 		numSlots = hash.numSlots;
@@ -114,15 +114,20 @@ bool Hash<T>::query( const T &item )
 template <class T>
 void Hash<T>::remove (T &item)
 {
-	int index = -1;
+	int index_hor = -1;
+	int index_ver = -1;
+	
 	for (int i = 0; i < numSlots; i++) {
-		if (arr_ptr[i].query(item)) {
-			index = i;
+		index_ver = arr_ptr[i].search(item);
+		if (index_ver != -1) {
+			index_hor = i;
 			break;
 		}
+		
 	}
-	if (index != -1)
-		arr_ptr[index].remove(item);
+	if (index_hor != -1)
+		arr_ptr[index_hor].remove(index_ver);
+	else throw underflow_error("Can't find item to remove");
 }
 
 //=====================================================
@@ -165,6 +170,10 @@ void Hash<T>::clearAll (void )
 template <class T>
 int Hash<T>::getSlotCount (int slot)
 {
+	// throw error if it is out of range
+	if(slot < 0 || slot > numSlots)
+        	throw std::out_of_range("index is out of range");
+
 	return arr_ptr[slot].length();
 }
 

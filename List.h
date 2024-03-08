@@ -1,7 +1,7 @@
 //========================================================
 // March 2024
 // List.h
-// Name: Daniel Chu, Ashwin Krishnamurthy 
+// Name: Daniel Chu, Ashwin Krishnamurthy, Jianheng Guo
 // This file contains the List class declaration.  
 //========================================================
 
