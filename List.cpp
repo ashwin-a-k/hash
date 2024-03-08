@@ -1,6 +1,7 @@
 //===============================
 // List.cpp
-// List with Linked List Structure with method implementations
+// List with Linked List Structure
+// with method implementations
 // Name: Daniel Chu, Ashwin Krishnamurthy 
 // March 2024
 //===============================
@@ -271,8 +272,12 @@ void	List<T>::	remove		( int index ){
     // if we try to delete the first node of the list 
     if (index == 0) {
         temp = head;
-        head = head->next;
-        head->prev = NULL;
+        if (head->next != nullptr) {
+            head = head->next;
+            head->prev = nullptr;
+        } else {
+            head = tail = nullptr;
+        }
         delete temp;
         return;
     }
@@ -290,6 +295,12 @@ void	List<T>::	remove		( int index ){
 
     temp = qtr->next;
     qtr->next = temp->next;
+    
+    // Update tail if last element is removed
+    if (temp == tail)
+    {
+    	tail = qtr;
+    }
     if(temp->next != NULL){
         temp->next->prev = qtr;
     }
