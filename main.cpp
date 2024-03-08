@@ -45,8 +45,13 @@ int	main( int argc, char *argv[] )
    for (int i=0; i < table.getNumSlots(); i++)
       sd += pow((float)table.getSlotCount(i) - avg, 2);
    sd = sqrt(sd / (float)table.getNumSlots());
+   
 
-   cout << total << endl << avg << endl << sd << endl << min << endl << max << endl << endl;
+   cout << "Total: " << total << endl; 
+   cout << "Average: " << avg << endl; 
+   cout << "standard deviation: " << sd << endl; 
+   cout << "minimum: " << min << endl; 
+   cout << "maximum: " << max << endl << endl;
    
    // Best Hashing performance with 50 hash table slots
    /*
@@ -59,6 +64,32 @@ int	main( int argc, char *argv[] )
    {
    	cout << "Slot " << i << ": " << slotCounts[i] << " items" << endl;
    }
+   
+   
+   // testing of hash class
+   // assignment operator
+   Hash<Board> table2(size);
+   table2 = table;
+   
+   // query test
+   cout << table2.query(b) << endl;
+   
+   // remove test
+   table2.remove(b);
+   //table2.remove(b); double remove
+   cout << table2.query(b) << endl;
+   //insert test
+   table2.insert(b);
+   cout << table2.query(b) << endl;
+   
+   // get slot count
+   int numSlots = table2.getNumSlots();
+   for (int i=0; i < numSlots/2; i++)
+   	cout << table2.getSlotCount(i) << " ";
+   cout << endl;
    */
+   
+   
+   
    return 0;
 }
